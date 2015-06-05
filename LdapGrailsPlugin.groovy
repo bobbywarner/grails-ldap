@@ -3,8 +3,8 @@ import grails.ldap.LdapClassArtefactHandler
 
 class LdapGrailsPlugin {
 
-    def version = "0.8.2"
-    def grailsVersion   = "1.3 > *"
+    def version = "0.9.0"
+    def grailsVersion   = "2.3 > *"
     def author = 'Luke Daley'
     def authorEmail = 'ld@ldaley.com'
     def title = 'LDAP Plugin'
