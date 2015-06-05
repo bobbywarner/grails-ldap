@@ -19,4 +19,10 @@ grails.project.dependency.resolution = {
         test 'org.apache.directory.shared:shared-ldap:0.9.12'
         test 'org.apache.directory.shared:shared-ldap-constants:0.9.12'
     }
+    plugins {
+        build(":release:3.1.1",
+              ":rest-client-builder:2.1.1") {
+            export = false
+        }
+    }
 }
