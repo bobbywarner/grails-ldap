@@ -8,3 +8,4 @@ ldap {
         }
     }
 }
+grails.naming.entries = null
