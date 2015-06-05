@@ -12,5 +12,10 @@ grails.project.dependency.resolution = {
         compile('org.codehaus:gldapo:0.8.5') {
             excludes 'spring-core', 'spring-beans', 'servlet-api', 'commons-logging', 'commons-lang'
         }
+
+        test 'org.apache.directory.server:apacheds-all:1.5.4'
+        test 'org.apache.directory.shared:shared-asn1:0.9.12'
+        test 'org.apache.directory.shared:shared-ldap:0.9.12'
+        test 'org.apache.directory.shared:shared-ldap-constants:0.9.12'
     }
 }
