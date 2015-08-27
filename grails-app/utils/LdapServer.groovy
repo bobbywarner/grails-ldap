@@ -1,24 +1,24 @@
 import org.apache.directory.server.core.DefaultDirectoryService
+import org.apache.directory.server.core.partition.impl.btree.jdbm.JdbmIndex
+import org.apache.directory.server.core.partition.impl.btree.jdbm.JdbmPartition
 import org.apache.directory.server.ldap.LdapService
 import org.apache.directory.server.protocol.shared.SocketAcceptor
-import org.apache.directory.shared.ldap.name.LdapDN
-import org.apache.directory.server.core.partition.impl.btree.jdbm.JdbmPartition
-import org.apache.directory.server.core.partition.impl.btree.jdbm.JdbmIndex
-import org.springframework.beans.factory.InitializingBean
 import org.apache.directory.shared.ldap.exception.LdapNameNotFoundException
+import org.apache.directory.shared.ldap.name.LdapDN
+import org.springframework.beans.factory.InitializingBean
 
 class LdapServer implements InitializingBean {
-    
+
     private directoryService
     private ldapService
-    
-    void afterPropertiesSet()
-    {
+
+    void afterPropertiesSet() {
+
         def workDir = new File("server-work")
         if (workDir.exists()) workDir.deleteDir()
-        
+
         directoryService = new DefaultDirectoryService()
-                            
+
         directoryService.changeLog.enabled = false
         def partition = addPartition("grails", "dc=grails,dc=org")
         addIndex(partition, "objectClass", "ou", "uid")
@@ -34,18 +34,15 @@ class LdapServer implements InitializingBean {
             entry.add("dc", "grails")
             directoryService.adminSession.add(entry)
         }
-        
-        ldapService = new LdapService()
-        ldapService.socketAcceptor = new SocketAcceptor(null)
-        ldapService.directoryService = directoryService
-        ldapService.ipPort = 10389
+
+        ldapService = new LdapService(socketAcceptor: new SocketAcceptor(null),
+                                      directoryService: directoryService,
+                                      ipPort: 10389)
         ldapService.start()
     }
-        
+
     def addPartition(partitionId, partitionDn) {
-        def partition = new JdbmPartition()
-        partition.id = partitionId
-        partition.suffix = partitionDn
+        def partition = new JdbmPartition(id: partitionId, suffix: partitionDn)
         directoryService.addPartition(partition)
 
         partition
