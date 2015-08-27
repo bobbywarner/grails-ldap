@@ -1,8 +1,11 @@
 package grails.ldap;
 
-import org.codehaus.groovy.grails.commons.*;
-import gldapo.schema.annotation.GldapoNamingAttribute;
 import java.lang.reflect.Field;
+
+import org.codehaus.groovy.grails.commons.ArtefactHandlerAdapter;
+import org.codehaus.groovy.grails.commons.GrailsClass;
+
+import gldapo.schema.annotation.GldapoNamingAttribute;
 
 public class LdapClassArtefactHandler extends ArtefactHandlerAdapter {
 
@@ -21,8 +24,9 @@ public class LdapClassArtefactHandler extends ArtefactHandlerAdapter {
     public static boolean isLdapClass(Class clazz) {
         if (clazz == null) return false;
         for (Field field : clazz.getDeclaredFields()) {
-            if (field.getAnnotation(GldapoNamingAttribute.class) != null)
+            if (field.getAnnotation(GldapoNamingAttribute.class) != null) {
                 return true;
+            }
         }
         return false;
     }

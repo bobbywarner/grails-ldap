@@ -6,6 +6,6 @@ class Person {
 
     @GldapoNamingAttribute
     String cn
-    
+
     String sn
 }

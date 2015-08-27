@@ -17,26 +17,21 @@ class LdapGrailsPlugin {
     def artefacts = [LdapClassArtefactHandler]
     def watchedResources = ["file:./grails-app/ldap/**", "file:./grails-app/conf/*Config.groovy"]
     def pluginExcludes = [
-        "grails-app/conf/Config.groovy",
         "grails-app/utils/LdapServer.groovy",
-        "grails-app/ldap/*",
-        "grails-app/spring/resources.groovy",
-        "test-lib",
-        "scripts/_Events.groovy",
-        "server-work"
+        "grails-app/ldap/*"
     ]
 
     def doWithSpring = {
         gldapo(Gldapo)
     }
 
-    def mergeLdapClassesIntoConfig(ldapClasses, config) {
-        def mergedConfig = (config.size() > 0) ? config.clone() : [:]
+    private mergeLdapClassesIntoConfig(ldapClasses, config) {
+        def mergedConfig = config ? config.clone() : [:]
 
-        if (mergedConfig.schemas == null || mergedConfig.schemas instanceof ConfigObject) mergedConfig.schemas = []
+        if (!mergedConfig.schemas) mergedConfig.schemas = []
 
         ldapClasses.clazz.each {
-            if (mergedConfig.schemas.contains(it) == false) mergedConfig.schemas << it
+            if (!mergedConfig.schemas.contains(it)) mergedConfig.schemas << it
         }
 
         mergedConfig
@@ -44,11 +39,11 @@ class LdapGrailsPlugin {
 
     def doWithDynamicMethods = { ctx ->
         def config = mergeLdapClassesIntoConfig(application.ldapClasses, application.config.ldap)
-        ctx.getBean("gldapo").consumeConfig(config)
+        ctx.gldapo.consumeConfig(config)
     }
 
     def onChange = { event ->
         def config = mergeLdapClassesIntoConfig(event.application.ldapClasses, event.application.config.ldap)
-        event.ctx.getBean("gldapo").resetWithConfig(config)
+        event.ctx.gldapo.resetWithConfig(config)
     }
 }
