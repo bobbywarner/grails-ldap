@@ -2,12 +2,21 @@ package grails.ldap;
 
 import java.lang.reflect.Field;
 
+import org.codehaus.groovy.grails.commons.AbstractGrailsClass;
 import org.codehaus.groovy.grails.commons.ArtefactHandlerAdapter;
 import org.codehaus.groovy.grails.commons.GrailsClass;
 
 import gldapo.schema.annotation.GldapoNamingAttribute;
 
 public class LdapClassArtefactHandler extends ArtefactHandlerAdapter {
+
+    public static interface GrailsLdapClass extends GrailsClass {}
+
+    public static class DefaultGrailsLdapClass extends AbstractGrailsClass implements GrailsLdapClass {
+        public DefaultGrailsLdapClass(Class clazz) {
+			super(clazz, "");
+		}
+    }
 
     public LdapClassArtefactHandler() {
         super("Ldap", GrailsLdapClass.class, DefaultGrailsLdapClass.class, null);
